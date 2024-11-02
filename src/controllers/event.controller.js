@@ -47,7 +47,7 @@ export async function registerEventController(req, res){
   }
 }
 
-export async function getEventsController(req,res){
+export async function   getEventsController(req,res){
   try {
     const {model, type, status, include, startTime, endTime, page=1, limit=10} = req.query
     const[ receiverModel, receiverId ] = getReceiver(req);

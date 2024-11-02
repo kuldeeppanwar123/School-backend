@@ -1,8 +1,35 @@
 paths:
-  /event/parent-forget-password:
+  # /event/parent-forget-password:
+  #   post:
+  #     summary: "To register forget password request"
+  #     description: "This API allow parent to register forget password request."
+  #     tags:
+  #     - "Event"
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               type:
+  #                 type: string
+  #               title:
+  #                 type: string
+  #               description:
+  #                 type: string
+  #     responses:
+  #       200:
+  #         description: "event registered successfully"
+  #       400:
+  #         description: "Unauthorized request"
+  #       500:
+  #         description: "Server error"
+
+  /event/register:
     post:
-      summary: "To register forget password request"
-      description: "This API allow parent to register forget password request."
+      summary: "To register event"
+      description: "This API allow register event."
       tags:
       - "Event"
       requestBody:
@@ -12,12 +39,19 @@ paths:
             schema:
               type: object
               properties:
-                eventType:
+                type:
                   type: string
                 title:
                   type: string
                 description:
                   type: string
+                sender:
+                  type: object
+                  properties:
+                    phone:
+                      type: string
+                    model:
+                      type: string
       responses:
         200:
           description: "event registered successfully"
@@ -25,3 +59,69 @@ paths:
           description: "Unauthorized request"
         500:
           description: "Server error"
+
+  /event/admin:
+    get:
+      security:
+        - Authorization: []
+      summary: "To get event by admin"
+      description: "This API allow to get event by admin."
+      tags:
+      - "Event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                model:
+                  type: string
+                type:
+                  type: string
+                status:
+                  type: string
+                include:
+                  type: string 
+                startTime:
+                  type: number  
+                endTime:
+                  type: number  
+                page:
+                  type: number
+                limit:
+                  type: number    
+      responses:
+        200:
+          description: "event registered successfully"
+        400:
+          description: "Unauthorized request"
+        500:
+          description: "Server error"        
+
+ 
+    put:
+      security:
+        - Authorization: []
+      summary: "To update event"
+      description: "This API allow update event."
+      tags:
+      - "Event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventId:
+                  type: id
+                status:
+                  type: string
+      responses:
+        200:
+          description: "event registered successfully"
+        400:
+          description: "Unauthorized request"
+        500:
+          description: "Server error" 
