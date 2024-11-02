@@ -292,3 +292,106 @@ paths:
           description: "Forbidden"
         500:
           description: "Internal Server Error"
+
+  /teacher/forget-password: 
+    put:
+      security:
+        - Authorization: []    
+      tags:
+      - "Teacher"
+      summary: "Forget Password of teacher"
+      description: "This API will allow to forget password "
+      produces:
+      - "application/json"
+      requestBody:
+         required: true
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                 otp:
+                   type: string
+                 phone:
+                   type: string  
+      responses:
+        200:
+          description: "successful"
+        422:
+          description: "Unprocessable Entity"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal Server Error"
+  
+  /teacher/forget-password-change: 
+    put:
+      security:
+        - Authorization: []    
+      tags:
+      - "Teacher"
+      summary: "Forget Password change of teacher"
+      description: "This API will allow to forget password "
+      produces:
+      - "application/json"
+      requestBody:
+         required: true
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                 id:
+                   type: string 
+                 password:
+                   type: string  
+      responses:
+        200:
+          description: "successful"
+        422:
+          description: "Unprocessable Entity"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal Server Error"
+  
+  /teacher/address: 
+    put:
+      security:
+        - Authorization: []    
+      tags:
+      - "Teacher"
+      summary: "Forget Password change of teacher"
+      description: "This API will allow to forget password "
+      produces:
+      - "application/json"
+      requestBody:
+         required: true
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                 country:
+                   type: string
+                 state:
+                   type: string  
+                 district:
+                   type: string
+                 city:
+                   type: string
+                 address:
+                   type: string
+                 pincode:
+                   type: string         
+                 
+      responses:
+        200:
+          description: "successful"
+        422:
+          description: "Unprocessable Entity"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal Server Error"
+  
