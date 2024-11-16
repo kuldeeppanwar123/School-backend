@@ -11,14 +11,70 @@ paths:
       - "application/json"
 
       responses:
-        200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
+      '200':
+        description: "Class deleted successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Class deleted successfully."
+      '400':
+        description: "Invalid or missing classId."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Invalid request: classId is required."
+      '404':
+        description: "Class not found with the provided classId."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Class not found with the provided classId."
+      '500':
+        description: "Unexpected error."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
 
   /admin-dashboard/parent-count: 
     get:

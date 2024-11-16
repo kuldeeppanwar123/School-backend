@@ -1,195 +1,690 @@
 paths:
-  /attendance/teacher: 
-      post:
-        security: 
-          - Authorization: []
-        tags:
-          - "Attendance"
-        summary: "To mark attendance of student"
-        description: "This API will allow class-teacher to mark attendance of student."
-        produces:
-          - "application/json"
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  sectionId:
-                    type: string
-                  present:
-                    type: array
-                    items:
-                      type: string
-                    description: "Array of student IDs who are present"
-                  absent:
-                    type: array
-                    items:
-                      type: string
-                    description: "Array of student IDs who are absent"
-        responses:
-          200:
-            description: "successful"
-          422:
-            description: "Unprocessable Entity"
-          403:
-            description: "Forbidden"
-          500:
-            description: "Internal Server Error"
-      put:
-        security: 
-          - Authorization: []
-        tags:
-          - "Attendance"
-        summary: "To update marked attendance"
-        description: "This API will allow class-teacher to update attendance of student."
-        produces:
-          - "application/json"
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  present:
-                    type: array
-                    items:
-                      type: object
-                    description: "Array of student IDs who are present"
-                  absent:
-                    type: array
-                    items:
-                      type: object
-                    description: "Array of student IDs who are absent"
-        responses:
-          200:
-            description: "successful"
-          422:
-            description: "Unprocessable Entity"
-          403:
-            description: "Forbidden"
-          500:
-            description: "Internal Server Error"
+  /attendance/teacher:
+   post:
+    security:
+      - Authorization: []
+    tags:
+      - "Attendance"
+    summary: "Mark attendance for students"
+    description: "This API allows the class-teacher to mark attendance for students."
+    produces:
+      - "application/json"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              sectionId:
+                type: string
+                example: "123"
+              present:
+                type: array
+                items:
+                  type: string
+                  example: "item 1"
+                description: "Array of student IDs who are present"
+              absent:
+                type: array
+                items:
+                  type: string
+                  example: "item 2"
+                description: "Array of student IDs who are absent"
+    responses:
+      '200':
+        description: "Attendance marked successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Attendance marked successfully."
+      '404':
+        description: "Authentication failed due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Authentication error: missing or invalid fields."
+      '409':
+        description: "Conflict error: already exists."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 409
+                message:
+                  type: string
+                  example: "Resource already exists."
+      '500':
+        description: "Internal server error. Unexpected issue during registration."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
 
-  /attendance/parent: 
-      post:
-        security: 
-          - Authorization: []
-        tags:
-          - "Attendance"
-        summary: "To mark attendance of student"
-        description: "This API will allow class-teacher to mark attendance of student."
-        produces:
-          - "application/json"
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  studentId:
-                    type: string
-                  attendance:
-                    type: string
-        responses:
-          200:
-            description: "successful"
-          422:
-            description: "Unprocessable Entity"
-          403:
-            description: "Forbidden"
-          500:
-            description: "Internal Server Error"
+   put:
+    security:
+      - Authorization: []
+    tags:
+      - "Attendance"
+    summary: "Update attendance for students"
+    description: "This API allows the class-teacher to update attendance for students."
+    produces:
+      - "application/json"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              present:
+                type: array
+                items:
+                  type: string
+                description: "Array of student IDs who are present"
+              absent:
+                type: array
+                items:
+                  type: string
+                description: "Array of student IDs who are absent"
+    responses:
+      '200':
+        description: "Attendance updated successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Attendance updated successfully."
+      '404':
+        description: "Authentication failed due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Authentication error: missing or invalid fields."
+      '409':
+        description: "Conflict error: resource already exists."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 409
+                message:
+                  type: string
+                  example: "Resource already exists."
+      '500':
+        description: "Internal server error. Unexpected issue occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
+
+
+  /attendance/parent:
+   post:
+    security:
+      - Authorization: []
+    tags:
+      - "Attendance"
+    summary: "Mark attendance for a student"
+    description: "This API allows the class-teacher to mark attendance for a student."
+    produces:
+      - "application/json"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              studentId:
+                type: string
+              attendance:
+                type: string
+    responses:
+      '200':
+        description: "Attendance marked successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Attendance marked successfully."
+      '404':
+        description: "Authentication failed due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Authentication error: missing or invalid fields."
+      '409':
+        description: "Conflict error. Resource already exists."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 409
+                message:
+                  type: string
+                  example: "Resource already exists."
+      '500':
+        description: "Internal server error. Unexpected issue occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
+
   
-  /attendance/mismatch/: 
-      get:
-        security: 
-          - Authorization: []
-        tags:
-          - "Attendance"
-        summary: "To get mismatch attendance"
-        description: "This API will allow class-teacher to get mismatch attendance."
-        produces:
-          - "application/json"
-        responses:
-          200:
-            description: "successful"
-          422:
-            description: "Unprocessable Entity"
-          403:
-            description: "Forbidden"
-          500:
-            description: "Internal Server Error"
+  /attendance/mismatch:
+   get:
+    security: 
+      - Authorization: []
+    tags:
+      - "Attendance"
+    summary: "Get mismatch attendance"
+    description: "This API allows the class teacher to get mismatch attendance."
+    produces:
+      - "application/json"
+    responses:
+      '200':
+        description: "Mismatch attendance retrieved successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Mismatch attendance retrieved successfully."
+      '404':
+        description: "Authentication failed due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Authentication error: missing or invalid fields."
+      '409':
+        description: "Conflict error. Resource already exists."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 409
+                message:
+                  type: string
+                  example: "Resource already exists."
+      '500':
+        description: "Internal server error. Unexpected issue occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
+
 
   /attendance/status: 
-      post:
-        security: 
-          - Authorization: []
-        tags:
-          - "Attendance"
-        summary: "To get daily attendance status"
-        description: "This API will allow class-teacher to get daily attendance status."
-        produces:
-          - "application/json"
-        responses:
-          200:
-            description: "successful"
-          422:
-            description: "Unprocessable Entity"
-          403:
-            description: "Forbidden"
-          500:
-            description: "Internal Server Error"
+   post:
+    security: 
+      - Authorization: []
+    tags:
+      - "Attendance"
+    summary: "Get daily attendance status"
+    description: "This API allows the class teacher to get the daily attendance status."
+    produces:
+      - "application/json"
+    responses:
+      '200':
+        description: "Attendance status retrieved successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Attendance status retrieved successfully."
+      '404':
+        description: "Authentication failed due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Authentication error: missing or invalid fields."
+      '409':
+        description: "Conflict error. Resource already exists."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 409
+                message:
+                  type: string
+                  example: "Resource already exists."
+      '500':
+        description: "Internal server error. Unexpected issue occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
+
+  /attendance/status/{studentId}: 
+   get:
+    security: 
+      - Authorization: []
+    tags:
+      - "Attendance"
+    summary: "Check if parent has marked attendance"
+    description: "This API allows a parent to check whether the attendance has been marked for their child."
+    produces:
+      - "application/json"
+    parameters:
+      - in: path
+        name: studentId
+        required: true
+        description: ID of the student
+        schema:
+          type: string
+    requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startTime:
+                  type: number
+                endTime:
+                  type: number    
+          
+    responses:
+      '200':
+        description: "Attendance status retrieved successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Attendance status retrieved successfully."
+      '404':
+        description: "Authentication failed due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Authentication error: missing or invalid fields."
+      '409':
+        description: "Conflict error. Resource already exists."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 409
+                message:
+                  type: string
+                  example: "Resource already exists."
+      '500':
+        description: "Internal server error. Unexpected issue occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
 
   /attendance/teacher/is-marked: 
-      get:
-        security: 
-          - Authorization: []
-        tags:
-          - "Attendance"
-        summary: "To check teacher marked attendance or not"
-        description: "This API will allow class-teacher to check attendace is marked or not"
-        produces:
-          - "application/json"
-        responses:
-          200:
-            description: "successful"
-          422:
-            description: "Unprocessable Entity"
-          403:
-            description: "Forbidden"
-          500:
-            description: "Internal Server Error"
-
-  /attendance/parent/is-marked/{studentId}: 
-      get:
-        security: 
-          - Authorization: []
-        tags:
-          - "Attendance"
-        summary: "To check parent marked attendance or not"
-        description: "This API will allow parent to check attendance marked or not."
-        produces:
-          - "application/json"
-        parameters:
-          - in: path
-            name: studentId
-            required: true
-            description: ID of the student
+   get:
+    security: 
+      - Authorization: []
+    tags:
+      - "Attendance"
+    summary: "Check if teacher attendance is marked"
+    description: "Allows the class teacher to check if attendance is marked."
+    produces:
+      - "application/json"
+    responses:
+      '200':
+        description: "Attendance status retrieved successfully."
+        content:
+          application/json:
             schema:
-              type: string
-        responses:
-          200:
-            description: "successful"
-          422:
-            description: "Unprocessable Entity"
-          403:
-            description: "Forbidden"
-          500:
-            description: "Internal Server Error"
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Attendance status retrieved successfully."
+      '404':
+        description: "Authentication failed due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Authentication error: missing or invalid fields."
+      '409':
+        description: "Conflict error. Resource already exists."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 409
+                message:
+                  type: string
+                  example: "Resource already exists."
+      '500':
+        description: "Internal server error. Unexpected issue occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."  
+            
+  /attendance/parent/is-marked/{studentId}: 
+   get:
+    security: 
+      - Authorization: []
+    tags:
+      - "Attendance"
+    summary: "Check if parent has marked attendance"
+    description: "This API allows a parent to check whether the attendance has been marked for their child."
+    produces:
+      - "application/json"
+    parameters:
+      - in: path
+        name: studentId
+        required: true
+        description: ID of the student
+        schema:
+          type: string
+    responses:
+      '200':
+        description: "Attendance status retrieved successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Attendance status retrieved successfully."
+      '404':
+        description: "Authentication failed due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Authentication error: missing or invalid fields."
+      '409':
+        description: "Conflict error. Resource already exists."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 409
+                message:
+                  type: string
+                  example: "Resource already exists."
+      '500':
+        description: "Internal server error. Unexpected issue occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
+
 
   /attendance/parent/count:
     post:
@@ -215,14 +710,70 @@ paths:
                 endTime:
                   type: number
       responses:
-        200:
-          description: "Successful operation"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
+        '200':
+          description: "Admin updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Admin updated successfully."
+        '404':
+          description: "Authentication failed due to incorrect or missing input."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Authentication error: missing or invalid fields."
+        '409':
+          description: "Conflict error. already exists."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 409
+                  message:
+                    type: string
+                    example: "already exists."
+        '500':
+          description: "Internal server error. Unexpected issue during registration."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
 
   /attendance/teacher/count:
     post:
@@ -248,11 +799,67 @@ paths:
                 endTime:
                   type: number
       responses:
-        200:
-          description: "Successful operation"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
+        '200':
+          description: "Admin updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Admin updated successfully."
+        '404':
+          description: "Authentication failed due to incorrect or missing input."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Authentication error: missing or invalid fields."
+        '409':
+          description: "Conflict error. already exists."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 409
+                  message:
+                    type: string
+                    example: "already exists."
+        '500':
+          description: "Internal server error. Unexpected issue during registration."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."

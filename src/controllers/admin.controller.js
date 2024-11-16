@@ -17,10 +17,10 @@ export async function registerAdminController(req, res) {
       return res.status(StatusCodes.CONFLICT).send(error(409, "Email already exist"));
     }
     if (admin && admin?.affiliationNo === affiliationNo) {
-      return res.status(StatusCodes.CONFLICT).send(error(400, "Affiliation no already exist"));
+      return res.status(StatusCodes.CONFLICT).send(error(409, "Affiliation no already exist"));
     }
     if (admin && admin?.phone === phone) {
-      return res.status(StatusCodes.CONFLICT).send(error(400, "Phone number already exist"));
+      return res.status(StatusCodes.CONFLICT).send(error(409, "Phone number already exist"));
     }
     const hashedPassword = await hashPasswordService(password);
     req.body["password"] = hashedPassword;

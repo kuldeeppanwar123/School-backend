@@ -1,69 +1,13 @@
 paths:
-  /admin: 
+  /admin:
     post:
       tags:
-      - "Admin"
-      summary: "Register admin to system."
-      description: "This API will register admin to the system."
+        - "Admin"
+      summary: "Register a new admin in the system."
+      description: "This API endpoint registers a new admin in the system with necessary details."
       operationId: "RegisterAdmin"
       produces:
-      - "application/json"
-      requestBody:
-         required: true
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 schoolName:
-                   type: string
-                 affiliationNo:
-                   type: string
-                 address:
-                   type: string
-                 email:
-                   type: string
-                 phone:
-                   type: string
-                 username:
-                   type: string
-                 password:
-                   type: string
-      responses:
-        200:
-          description: "Successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
-    get:
-      security: 
-        - Authorization: []
-      tags:
-      - "Admin"
-      summary: "To get admin profile."
-      description: "This API will get the admin profile."
-      operationId: "AdminProfile"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
-    put:
-      security:
-        - Authorization: []
-      summary: "To update an admin profile"
-      description: "This API will allow an admin to update their profile. It requires an admin login token."
-      tags:
-      - "Admin"
+        - "application/json"
       requestBody:
         required: true
         content:
@@ -73,70 +17,357 @@ paths:
               properties:
                 schoolName:
                   type: string
-                principalName:
-                  type: string
-                schoolBoard:
-                  type: string
-                schoolNumber:
-                  type: string
+                  example: "N.V.V.H.S.S"
                 affiliationNo:
                   type: string
+                  example: "123456"
                 address:
                   type: string
-                city:
-                  type: string
-                state:
-                  type: string
+                  example: "Kerala"
                 email:
                   type: string
+                  example: "admin@example.com"
+                phone:
+                  type: string
+                  example: "1234567890"
                 username:
                   type: string
+                  example: "admin"
+                password:
+                  type: string
+                  format: password
       responses:
-        200:
-          description: "Profile updated successfully"
-        400:
-          description: "Unauthorized request"
-        500:
-          description: "Server error"
+        '201':
+          description: "Admin successfully registered."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Admin registered successfully."
+        '400':
+          description: "Validation failed due to incorrect or missing input."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Validation error: missing or invalid fields."
+        '409':
+          description: "Conflict error. already exists."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 409
+                  message:
+                    type: string
+                    example: "Admin already exists."
+        '500':
+          description: "Internal server error. Unexpected issue during registration."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
 
-  /admin/login: 
+    get:
+      security:
+        - Authorization: []
+      tags:
+        - "Admin"
+      summary: "To get admin profile."
+      description: "This API will get the admin profile."
+      operationId: "AdminProfile"
+      produces:
+        - "application/json"
+      responses:
+        '200':
+          description: "Admin Get Successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Admin Get successfully."
+        '404':
+          description: "Authentication failed due to incorrect or missing input."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Authentication error: missing or invalid fields and details."
+        '500':
+          description: "Internal server error. Unexpected issue during Get Admin."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
+
+    put:
+      security:
+        - Authorization: []
+      tags:
+        - "Admin"
+      summary: "To update an admin profile"
+      description: "This API will allow an admin to update their profile. It requires an admin login token."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schoolName:
+                  type: string
+                  example: "N.V.V.H.S.S"
+                principalName:
+                  type: string
+                  example: "abc"
+                schoolBoard:
+                  type: string
+                  example: "board"
+                schoolNumber:
+                  type: string
+                  example: "1232"
+                affiliationNo:
+                  type: string
+                  example: "12"
+                address:
+                  type: string
+                  example: "vijaynagar"
+                city:
+                  type: string
+                  exmple: "indore"
+                state:
+                  type: string
+                  example: "Madhya Pradesh"
+                email:
+                  type: string
+                  example: "abc@gmail.com"
+                username:
+                  type: string
+                  example: "xyz"
+      responses:
+        '200':
+          description: "Admin successfully Updated."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Admin Updated successfully."
+        '404':
+          description: "Authentication failed due to incorrect or missing input."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Authentication error: missing or invalid fields."
+        '409':
+          description: "Conflict error. already exists."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 409
+                  message:
+                    type: string
+                    example: "already exists."
+        '500':
+          description: "Internal server error. Unexpected issue during registration."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
+
+  /admin/login:
     post:
       tags:
-      - "Admin"
+        - "Admin"
       summary: "Login admin to system."
       description: "This API will log in admin to the system."
       operationId: "LoginAdmin"
       produces:
-      - "application/json"
+        - "application/json"
       requestBody:
-         required: true
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 email:
-                   type: string
-                 password:
-                   type: string
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "xyz@gmail.com"
+                password:
+                  type: string
+                  format: password
       responses:
-        200:
-          description: "Successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
+        '200':
+          description: "Admin Login successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Admin Login successfully."
+        '400':
+          description: "Validation failed due to incorrect or missing input."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Validation error: missing or invalid fields."
+        '401':
+          description: "Conflict error. Unauthorized user."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 409
+                  message:
+                    type: string
+                    example: "Unauthorized user."
+        '500':
+          description: "Internal server error. Unexpected issue during registration."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
 
   /admin/social:
     put:
       security:
         - Authorization: []
+      tags:
+        - "Admin"
       summary: "To update a social profile"
       description: "This API will allow an admin to update their social profile. It requires an admin login token."
-      tags:
-      - "Admin"
       requestBody:
         required: true
         content:
@@ -146,24 +377,90 @@ paths:
               properties:
                 phone:
                   type: string
+                  example: "1234567890"
                 website:
                   type: string
+                  example: "https://example.com"
                 facebook:
                   type: string
+                  example: "https://facebook.com/example"
                 instagram:
                   type: string
+                  example: "https://instagram.com/example"
                 linkedin:
                   type: string
+                  example: "https://linkedin.com/in/example"
                 twitter:
                   type: string
+                  example: "https://twitter.com/example"
                 whatsapp:
                   type: string
+                  example: "https://whatsapp.com/example"
                 youtube:
                   type: string
+                  example: "https://youtube.com/example"
       responses:
-        200:
-          description: "Social profile updated successfully"
-        400:
-          description: "Unauthorized request"
-        500:
-          description: "Server error"
+        '200':
+          description: "Admin updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Admin updated successfully."
+        '404':
+          description: "Authentication failed due to incorrect or missing input."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Authentication error: missing or invalid fields."
+        '409':
+          description: "Conflict error. already exists."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 409
+                  message:
+                    type: string
+                    example: "already exists."
+        '500':
+          description: "Internal server error. Unexpected issue during registration."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
