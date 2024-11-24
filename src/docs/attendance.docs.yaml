@@ -64,6 +64,22 @@ paths:
                 message:
                   type: string
                   example: "Authentication error: missing or invalid fields."
+      '400':
+        description: "No student provided due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "No student provided: missing or invalid fields."            
       '409':
         description: "Conflict error: already exists."
         content:
@@ -228,6 +244,22 @@ paths:
                 message:
                   type: string
                   example: "Attendance marked successfully."
+      '400':
+        description: "Not found due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Not found: missing or invalid fields."            
       '404':
         description: "Authentication failed due to incorrect or missing input."
         content:
@@ -244,6 +276,23 @@ paths:
                 message:
                   type: string
                   example: "Authentication error: missing or invalid fields."
+                  
+      '401':
+        description: "Parent is not authorized to mark attendance. due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Parent is not authorized to mark attendance. missing or invalid fields."            
       '409':
         description: "Conflict error. Resource already exists."
         content:
@@ -302,9 +351,54 @@ paths:
                 statusCode:
                   type: integer
                   example: 200
+                data:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date
+                      example: "2024-10-12"
+                    day:
+                      type: string
+                      example: "Monday"
+                    parentAttendance:
+                      type: string
+                      example: "Present"
+                    teacherAttendance:
+                      type: string
+                      example: "Absent"
+                    student:
+                      type: string
+                      format: objectId
+                      example: "64b2fdae2391a8723e40b1a4"
+                    section:
+                      type: string
+                      format: objectId
+                      example: "64b2fdae2391a8723e40b1a5"
+                    teacher:
+                      type: string
+                      format: objectId
+                      example: "64b2fdae2391a8723e40b1a6"
+                    admin:
+                      type: string
+                      format: objectId
+                      example: "64b2fdae2391a8723e40b1a7"            
+      '400':
+        description: "Today is sunday due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
                 message:
                   type: string
-                  example: "Mismatch attendance retrieved successfully."
+                  example: "Today is sunday: missing or invalid fields."
       '404':
         description: "Authentication failed due to incorrect or missing input."
         content:
@@ -320,7 +414,7 @@ paths:
                   example: 404
                 message:
                   type: string
-                  example: "Authentication error: missing or invalid fields."
+                  example: "Authentication error: missing or invalid fields."            
       '409':
         description: "Conflict error. Resource already exists."
         content:
@@ -432,7 +526,7 @@ paths:
                   example: "An unexpected error occurred."
 
   /attendance/status/{studentId}: 
-   get:
+   post:
     security: 
       - Authorization: []
     tags:
@@ -552,7 +646,7 @@ paths:
                   example: 200
                 message:
                   type: string
-                  example: "Attendance status retrieved successfully."
+                  example: "Attendance haven't marked today."
       '404':
         description: "Authentication failed due to incorrect or missing input."
         content:
@@ -585,6 +679,22 @@ paths:
                 message:
                   type: string
                   example: "Resource already exists."
+      '502':
+        description: "Internal server error. Unexpected issue occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "Section id is required."
       '500':
         description: "Internal server error. Unexpected issue occurred."
         content:
@@ -633,6 +743,15 @@ paths:
                 statusCode:
                   type: integer
                   example: 200
+                data:
+                  type: object
+                  properties:
+                    parentAttendance:
+                      type: string
+                      example: "marked"
+                    teacherAttendance:
+                      type: string
+                      example: "unmarked"
                 message:
                   type: string
                   example: "Attendance status retrieved successfully."

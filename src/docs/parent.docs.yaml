@@ -152,13 +152,88 @@ paths:
       description: "This API will get children of parent. It requires parent login token."
       tags:
       - "Parent"
-      responses:
-        200:
-          description: "teacher registered successfully"
-        400:
-          description: "Unauthorized request"
-        500:
-          description: "Server error"
+    responses:
+      '200':
+        description: "Children retrieved successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Children retrieved successfully."
+      '400':
+        description: "Invalid request due to missing or incorrect fields."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Invalid request. Please check your input."
+      '401':
+        description: "Unauthorized request. Parent not authenticated."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 401
+                message:
+                  type: string
+                  example: "Unauthorized. Please log in again."
+      '404':
+        description: "No children found for the parent."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "No children associated with this parent."
+      '500':
+        description: "Server error. Unexpected issue occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
+
 
 
   /parent/get-info:
@@ -169,13 +244,88 @@ paths:
       description: "This API will get parent. It requires parent login token."
       tags:
       - "Parent"
-      responses:
-        200:
-          description: "teacher registered successfully"
-        400:
-          description: "Unauthorized request"
-        500:
-          description: "Server error"
+    responses:
+      '200':
+        description: "Parent information retrieved successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Parent information retrieved successfully."
+      '400':
+        description: "Invalid request due to missing or incorrect fields."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Invalid request. Please check your input."
+      '401':
+        description: "Unauthorized request. Parent not authenticated."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 401
+                message:
+                  type: string
+                  example: "Unauthorized. Please log in again."
+      '404':
+        description: "Parent information not found."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Parent information not found."
+      '500':
+        description: "Server error. Unexpected issue occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
+
 
   /parent/holiday-events:
     post:

@@ -50,56 +50,333 @@ paths:
         500:
           description: "Internal Server Error"
 
-  /student/admin: 
-    post:
-      security:
-        - Authorization: []
-      tags:
-        - "Student"
-      summary: "Register a student via admin"
-      description: "This API allows an admin to register a student."
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      requestBody:
-        required: true
+  /student/excel:
+   post:
+    security:
+      - Authorization: []
+    tags:
+      - "Student"
+    summary: "Register students from an Excel file"
+    description: "This API allows a class teacher to register students by uploading an Excel file containing their details."
+    consumes:
+      - "multipart/form-data"
+    produces:
+      - "application/json"
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              sectionId:
+                type: string
+                description: "The ID of the section where students are being registered."
+                example: "64b2fdae2391a8723e40b1a5"
+              classId:
+                type: string
+                description: "The ID of the class where students are being registered."
+                example: "64b2fdae2391a8723e40b1a6"
+              file:
+                type: string
+                format: binary
+                description: "The Excel file containing the students' details."
+    responses:
+      201:
+        description: "Student successfully registered"
         content:
           application/json:
             schema:
               type: object
-              required:
-                - firstname
-                - lastname
-                - gender
-                - parentName
-                - phone
-                - sectionId
-                - classId
               properties:
-                firstname:
+                status:
                   type: string
-                lastname:
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 201
+                message:
                   type: string
-                gender:
+                  example: "Student successfully registered."
+      404:
+        description: "Authentication Failed - Invalid input"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
                   type: string
-                parentName:
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
                   type: string
-                phone:
+                  example: "Authentication failed. Invalid input data provided."
+      400:
+        description: "Invalid data provided"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
                   type: string
-                sectionId:
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
                   type: string
-                classId:
+                  example: "Invalid data. Please check your request."
+      500:
+        description: "Internal Server Error - Server failed to process the request"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
                   type: string
-      responses:
-        200:
-          description: "Student successfully registered"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred. Please try again later."
+
+
+  /student/admin:
+   post:
+    security:
+      - Authorization: []
+    tags:
+      - "Student"
+    summary: "Register a student via admin"
+    description: "This API allows an admin to register a student."
+    consumes:
+      - "application/json"
+    produces:
+      - "application/json"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - firstname
+              - lastname
+              - gender
+              - parentName
+              - phone
+              - sectionId
+            properties:
+              firstname:
+                type: string
+                example: "John"
+              lastname:
+                type: string
+                example: "Doe"
+              gender:
+                type: string
+                example: "Male"
+              parentName:
+                type: string
+                example: "Jane Doe"
+              phone:
+                type: string
+                example: "1234567890"
+              sectionId:
+                type: string
+                example: "S001"
+    responses:
+      200:
+        description: "Student successfully registered"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Student successfully registered."
+                
+      422:
+        description: "Unprocessable Entity - Invalid input"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 422
+                message:
+                  type: string
+                  example: "Invalid input data provided."
+      403:
+        description: "Forbidden - User does not have permission"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 403
+                message:
+                  type: string
+                  example: "You do not have permission to perform this action."
+      500:
+        description: "Internal Server Error - Server failed to process the request"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred. Please try again later."
+
+   get:
+    security:
+      - Authorization: []
+    tags:
+      - "Student"
+    summary: "Get a paginated list of students"
+    description: "This API allows an admin to retrieve a paginated list of students."
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              admin:
+                type: string
+                example: "admin123"
+              classId:
+                type: string
+                example: "class456"
+              section:
+                type: string
+                example: "A"
+              parent:
+                type: string
+                example: "parent789"
+              student:
+                type: string
+                example: "student012"
+              firstname:
+                type: string
+                example: "John"
+              lastname:
+                type: string
+                example: "Doe"
+              gender:
+                type: string
+                example: "Male"
+              page:
+                type: number
+                example: 1
+              startTime:
+                type: number
+                example: 1672531200
+              endTime:
+                type: number
+                example: 1672617600
+              limit:
+                type: number
+                example: 10
+              include:
+                type: string
+                example: 1
+    responses:
+      200:
+        description: "List of students successfully retrieved"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "List of students successfully retrieved."
+      422:
+        description: "Unprocessable Entity"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 422
+                message:
+                  type: string
+                  example: "Invalid input data provided."
+      403:
+        description: "Forbidden"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 403
+                message:
+                  type: string
+                  example: "You do not have permission to perform this action."
+      500:
+        description: "Internal Server Error"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred. Please try again later."
 
   /student/teacher/{studentId}: 
     delete:

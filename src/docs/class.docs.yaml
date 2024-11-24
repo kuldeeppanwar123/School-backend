@@ -119,18 +119,17 @@ paths:
                 data:
                   type: object
                   properties:
-                    id:
+                    section:
                       type: string
-                      example: "12345"
+                      example: "64b2fdae2391a8723e40b1a5"
+                      format: objectId
                     name:
                       type: string
                       example: "Mathematics"
-                    teacher:
-                      type: string
-                      example: "Mr. John Doe"
-                    studentsCount:
-                      type: integer
-                      example: 25
+                    admin:
+                       type: string
+                       example: "64b2fdae2391a8723e40b1a5"
+                       format: objectId
                 message:
                   type: string
                   example: "Class details fetched successfully."
@@ -290,6 +289,19 @@ paths:
                   statusCode:
                     type: integer
                     example: 200
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        admin:
+                          type: string
+                          example: "64b2fdae2391a8723e40b1a5"
+                          format: objectId
+                        section:
+                          type: string
+                          example: "64b2fdae2391a8723e40b1a5" 
+                          format: objectId 
                   message:
                     type: string
                     example: "Classes fetched successfully."

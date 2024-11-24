@@ -126,6 +126,34 @@ paths:
                   statusCode:
                     type: integer
                     example: 200
+                  data:
+                    type: object
+                    properties:
+                      schoolName:
+                        type: string
+                        example: "N.V.V.H.S.S"
+                      affiliationNo:
+                        type: string
+                        example: "123456"
+                      isActive:
+                        type: boolean
+                        example: true
+
+                      address:
+                        type: string
+                        example: "Kerala"
+                      email:
+                        type: string
+                        example: "admin@example.com"
+                      phone:
+                        type: string
+                        example: "1234567890"
+                      username:
+                        type: string
+                        example: "admin"
+                      password:
+                        type: string
+                        format: password
                   message:
                     type: string
                     example: "Admin Get successfully."
@@ -359,6 +387,68 @@ paths:
                   message:
                     type: string
                     example: "An unexpected error occurred."
+
+
+  /admin/refresh:
+   get:
+    security:
+      - Authorization: []
+    tags:
+      - "Admin"
+    summary: "Refresh Admin Token"
+    description: "This API allows the admin to refresh their token."
+    requestBody:
+      required: true
+    responses:
+      '200':
+        description: "Admin token refreshed successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                token:
+                  type: string
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      '404':
+        description: "Authentication failed due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Authentication failed: missing or invalid input."
+      '500':
+        description: "Internal server error. Unexpected issue during token refresh."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred while refreshing the token."
+
 
   /admin/social:
     put:

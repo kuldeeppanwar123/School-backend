@@ -1,110 +1,490 @@
 paths:
   /teacher:
-    post:
-      security:
-        - Authorization: []
-      summary: "To register a teacher"
-      description: "This API will register a teacher. It requires admin login token."
-      tags:
+   post:
+    security:
+      - Authorization: []
+    summary: "To register a teacher"
+    description: "This API will register a teacher. It requires admin login token."
+    tags:
       - "Teacher"
-      requestBody:
-        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstname:
+                type: string
+                example: "John"
+              lastname:
+                type: string
+                example: "Doe"
+              phone:
+                type: string
+                example: "+1234567890"
+    responses:
+      201:
+        description: "Teacher successfully registered"
         content:
           application/json:
             schema:
               type: object
               properties:
-                firstname:
+                status:
                   type: string
-                lastname:
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 201
+                message:
                   type: string
-                phone:
-                  type: string
-      responses:
-        200:
-          description: "teacher registered successfully"
-        400:
-          description: "Unauthorized request"
-        500:
-          description: "Server error"
-    put:
-      security:
-        - Authorization: []
-      summary: "To update profile-details of teacher"
-      description: "This API will udpate profile-details of a teacher. It requires class teacher login token."
-      tags:
-      - "Teacher"
-      requestBody:
-        required: true
+                  example: "Teacher successfully registered."
+                
+      404:
+        description: "Invalid input or teacher not found"
         content:
           application/json:
             schema:
               type: object
               properties:
-                firstname:
+                status:
                   type: string
-                lastname:
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
                   type: string
-                phone:
+                  example: "Teacher not found or invalid input data."
+      400:
+        description: "Invalid request data"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
                   type: string
-                dob:
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
                   type: string
-                bloodGroup:
+                  example: "Invalid request data. Please verify the inputs."
+      500:
+        description: "Internal server error"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
                   type: string
-                gender:
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
                   type: string
-                university:
+                  example: "An unexpected error occurred. Please try again later."
+   put:
+    security:
+      - Authorization: []
+    summary: "To update profile details of teacher"
+    description: "This API will update profile details of a teacher. It requires class teacher login token."
+    tags:
+      - "Teacher"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstname:
+                type: string
+                example: "Jane"
+              lastname:
+                type: string
+                example: "Smith"
+              phone:
+                type: string
+                example: "+9876543210"
+              dob:
+                type: string
+                example: "1990-01-01"
+              bloodGroup:
+                type: string
+                example: "B+"
+              gender:
+                type: string
+                example: "Female"
+              university:
+                type: string
+                example: "Oxford University"
+              degree:
+                type: string
+                example: "Master's in Education"
+    responses:
+      200:
+        description: "Teacher profile updated successfully"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
                   type: string
-                degree:
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
                   type: string
-      responses:
-        200:
-          description: "teacher registered successfully"
-        400:
-          description: "Unauthorized request"
-        500:
-          description: "Server error"
+                  example: "Teacher profile updated successfully."
+      404:
+        description: "Teacher not found or invalid input"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Teacher not found or invalid input data."
+      400:
+        description: "Invalid request data"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Invalid request data. Please verify the inputs."
+      500:
+        description: "Internal server error"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred. Please try again later."
 
   /teacher/login:
-    post:
-      summary: "To login a teacher"
-      description: "This API will login a teacher."
-      tags:
+   post:
+    summary: "To login a teacher"
+    description: "This API allows a teacher to login."
+    tags:
       - "Teacher"
-      requestBody:
-        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - user
+              - password
+            properties:
+              user:
+                type: string
+                example: "johndoe"
+                description: "Username or email of the teacher."
+              password:
+                type: string
+                example: "password123"
+                description: "Password for the teacher account."
+    responses:
+      200:
+        description: "Teacher successfully logged in"
         content:
           application/json:
             schema:
               type: object
               properties:
-                user:
+                status:
                   type: string
-                password:
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
                   type: string
-      responses:
-        200:
-          description: "teacher registered successfully"
-        400:
-          description: "Unauthorized request"
-        500:
-          description: "Server error"
+                  example: "Teacher successfully logged in."
+      404:
+        description: "Invalid input or teacher not found"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Teacher not found or invalid credentials."
+      400:
+        description: "Invalid request data"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Invalid request data. Please verify the inputs."
+      500:
+        description: "Internal server error"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred. Please try again later."
+
+  /teacher/refresh:
+   get:
+    summary: "Refresh Teacher Token"
+    description: "This API allows the teacher to refresh their token."
+    tags:
+      - "Teacher"
+    requestBody:
+      required: true
+    responses:
+      '200':
+        description: "teacher token refreshed successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                token:
+                  type: string
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      '404':
+        description: "Authentication failed due to incorrect or missing input."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "Authentication failed: missing or invalid input."
+      '500':
+        description: "Internal server error. Unexpected issue during token refresh."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred while refreshing the token."
 
   /teacher/all:
-    get:
-      security:
-        - Authorization: []
-      summary: "To get all teachers"
-      description: "This API will allow admin to get all teachers. It requires admin login token."
-      tags:
+   get:
+    security:
+      - Authorization: []
+    summary: "To get all teachers"
+    description: "This API allows the admin to retrieve a list of all teachers. It requires an admin login token."
+    tags:
       - "Teacher"
-      responses:
-        200:
-          description: "teacher registered successfully"
-        400:
-          description: "Unauthorized request"
-        500:
-          description: "Server error"
+    responses:
+      200:
+        description: "Teachers retrieved successfully"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Teachers retrieved successfully."
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: "john_doe_123"
+                      firstname:
+                        type: string
+                        example: "John"
+                      lastname:
+                        type: string
+                        example: "Doe"
+                      isLoginAlready:
+                        type: boolean
+                        example: true
+                      dob:
+                        type: string
+                        format: date
+                        example: "1990-05-15"
+                      bloodGroup:
+                        type: string
+                        example: "O+"
+                      email:
+                        type: string
+                        example: "john.doe@example.com"
+                      isActive:
+                        type: boolean
+                        example: true
+                      gender:
+                        type: string
+                        example: "Male"
+                      university:
+                        type: string
+                        example: "Oxford University"
+                      degree:
+                        type: string
+                        example: "Master of Science in Mathematics"
+                      phone:
+                        type: string
+                        example: "+1234567890"
+                      address:
+                        type: string
+                        example: "123 Baker Street, Apartment 4B"
+                      city:
+                        type: string
+                        example: "London"
+                      district:
+                        type: string
+                        example: "Westminster"
+                      state:
+                        type: string
+                        example: "England"
+                      country:
+                        type: string
+                        example: "United Kingdom"
+                      pincode:
+                        type: string
+                        example: "WC2N 5DU"
+                      photo:
+                        type: string
+                        example: "https://example.com/photos/john_doe.jpg"
+                      forgetPasswordCount:
+                        type: integer
+                        example: 2
+                      section:
+                        type: string
+                        format: objectId
+                        example: "64b2fdae2391a8723e40b1a5"
+                          
+      404:
+        description: "No teachers found"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "No teachers found in the database."
+      400:
+        description: "Invalid request data"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Invalid request data. Please verify the inputs."
+      500:
+        description: "Internal server error"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred. Please try again later."
 
   /teacher/{teacherId}:
     delete:
@@ -113,46 +493,232 @@ paths:
       summary: "To delete a teacher"
       description: "This API will allow admin to delete a teacher. It requires admin login token."
       tags:
-      - "Teacher"
+        - "Teacher"
       parameters:
-       - in: path
-         name: teacherId
-         required: true
-         description: ID of the teacher
-         schema:
+        - in: path
+          name: teacherId
+          required: true
+          description: ID of the teacher
+          schema:
             type: string
       responses:
         200:
-          description: "teacher registered successfully"
+          description: "Teacher deleted successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Teacher deleted successfully."
         400:
-          description: "Unauthorized request"
+          description: "Unauthorized request or invalid input"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request or unauthorized access."
+        404:
+          description: "Teacher not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "Teacher with the provided ID not found."
         500:
-          description: "Server error"
-  
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred. Please try again later."
+
   /teacher/unassigned:
     get:
       security:
         - Authorization: []
-      summary: "To get a unassigned teachers"
-      description: "This API will allow admin to get a list of unassigned teachers. It requires admin login token."
+      summary: "To get unassigned teachers"
+      description: "This API allows the admin to retrieve a list of unassigned teachers. It requires an admin login token."
       tags:
-      - "Teacher"
+        - "Teacher"
       responses:
         200:
-          description: "teacher registered successfully"
+          description: "Teachers retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Teachers retrieved successfully."
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                          example: "john_doe_123"
+                        firstname:
+                          type: string
+                          example: "John"
+                        lastname:
+                          type: string
+                          example: "Doe"
+                        isLoginAlready:
+                          type: boolean
+                          example: true
+                        dob:
+                          type: string
+                          format: date
+                          example: "1990-05-15"
+                        bloodGroup:
+                          type: string
+                          example: "O+"
+                        email:
+                          type: string
+                          example: "john.doe@example.com"
+                        isActive:
+                          type: boolean
+                          example: true
+                        gender:
+                          type: string
+                          example: "Male"
+                        university:
+                          type: string
+                          example: "Oxford University"
+                        degree:
+                          type: string
+                          example: "Master of Science in Mathematics"
+                        phone:
+                          type: string
+                          example: "+1234567890"
+                        address:
+                          type: string
+                          example: "123 Baker Street, Apartment 4B"
+                        city:
+                          type: string
+                          example: "London"
+                        district:
+                          type: string
+                          example: "Westminster"
+                        state:
+                          type: string
+                          example: "England"
+                        country:
+                          type: string
+                          example: "United Kingdom"
+                        pincode:
+                          type: string
+                          example: "WC2N 5DU"
+                        photo:
+                          type: string
+                          example: "https://example.com/photos/john_doe.jpg"
+                        forgetPasswordCount:
+                          type: integer
+                          example: 2
+                        section:
+                          type: string
+                          format: objectId
+                          example: "null"
+        404:
+          description: "No teachers found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "No teachers found in the database."
         400:
-          description: "Unauthorized request"
+          description: "Invalid request data"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request data. Please verify the inputs."
         500:
-          description: "Server error"
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred. Please try again later."
 
   /teacher/auth:
     put:
       security:
         - Authorization: []
-      summary: "To update auth-details of teacher"
-      description: "This API will udpate auth-details of a teacher. It requires class teacher login token."
+      summary: "Update authentication details of a teacher"
+      description: "This API updates the authentication details (username and password) of a teacher. It requires the class teacher's login token."
       tags:
-      - "Teacher"
+        - "Teacher"
       requestBody:
         required: true
         content:
@@ -162,24 +728,102 @@ paths:
               properties:
                 username:
                   type: string
+                  description: "The new username for the teacher."
+                  example: "john_doe"
                 password:
                   type: string
+                  description: "The new password for the teacher."
+                  example: "securePassword123"
       responses:
         200:
-          description: "teacher registered successfully"
+          description: "Authentication details updated successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Authentication details updated successfully."
         400:
-          description: "Unauthorized request"
+          description: "Invalid request or unauthorized access"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request data or unauthorized access."
+        404:
+          description: "Already Ragisterd"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: "Already Ragisterd"           
+        409:
+          description: "Teacher not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "Teacher not found in the system."
         500:
-          description: "Server error"
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred. Please try again later."
 
   /teacher/auth-info-update:
     put:
       security:
         - Authorization: []
-      summary: "To update auth-details of teacher"
-      description: "This API will udpate auth-details of a teacher. It requires class teacher login token."
+      summary: "Update authentication contact details of a teacher"
+      description: "This API updates the authentication contact details (email and phone) of a teacher. It requires the class teacher's login token."
       tags:
-      - "Teacher"
+        - "Teacher"
       requestBody:
         required: true
         content:
@@ -189,31 +833,110 @@ paths:
               properties:
                 email:
                   type: string
+                  description: "The updated email address for the teacher."
+                  example: "john.doe@example.com"
                 phone:
                   type: string
+                  description: "The updated phone number for the teacher."
+                  example: "+1234567890"
       responses:
         200:
-          description: "teacher registered successfully"
+          description: "Authentication details updated successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Authentication contact details updated successfully."
+        404:
+          description: "Token Authentication Failed"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: Token Authentication Failed"            
         400:
-          description: "Unauthorized request"
+          description: "Invalid request or unauthorized access"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request data or unauthorized access."
+        409:
+          description: "Teacher not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "Teacher not found in the system."
         500:
-          description: "Server error"
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred. Please try again later."
 
   /teacher/admin/{teacherId}:
     put:
       security:
         - Authorization: []
-      summary: "To update a teacher"
-      description: "This API will allow admin to update a teacher. It requires admin login token."
+      summary: "Update teacher details by admin"
+      description: "This API allows an admin to update details of a specific teacher. It requires an admin login token."
       tags:
-      - "Teacher"
+        - "Teacher"
       parameters:
-       - in: path
-         name: teacherId
-         required: true
-         description: ID of the teacher
-         schema:
+        - in: path
+          name: teacherId
+          required: true
+          description: "Unique ID of the teacher to update."
+          schema:
             type: string
+            example: "64b2fdae2391a8723e40b1a5"
       requestBody:
         required: true
         content:
@@ -223,28 +946,135 @@ paths:
               properties:
                 firstname:
                   type: string
+                  description: "Teacher's first name."
+                  example: "John"
                 lastname:
                   type: string
+                  description: "Teacher's last name."
+                  example: "Doe"
                 phone:
                   type: string
+                  description: "Teacher's phone number."
+                  example: "+1234567890"
                 address:
                   type: string
+                  description: "Teacher's full address."
+                  example: "123 Baker Street, Apartment 4B"
+                email:
+                  type: string
+                  description: "Teacher's email address."
+                  example: "john.doe@example.com"
+                dob:
+                  type: string
+                  format: date
+                  description: "Teacher's date of birth."
+                  example: "1990-05-15"
+                bloodGroup:
+                  type: string
+                  description: "Teacher's blood group."
+                  example: "O+"
+                gender:
+                  type: string
+                  description: "Teacher's gender."
+                  example: "Male"
+                university:
+                  type: string
+                  description: "University the teacher graduated from."
+                  example: "Oxford University"
+                degree:
+                  type: string
+                  description: "Teacher's highest degree."
+                  example: "Master of Science in Mathematics"
       responses:
         200:
-          description: "teacher registered successfully"
+          description: "Teacher details updated successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Teacher details updated successfully."
+        404:
+          description: "Token Authentication Failed"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: Token Authentication Failed"            
         400:
-          description: "Unauthorized request"
+          description: "Invalid request or unauthorized access"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request data or unauthorized access."
+        409:
+          description: "Teacher not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "Teacher not found in the system."
         500:
-          description: "Server error"
-  
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred. Please try again later."
+
   /teacher/password-change:
     put:
       security:
         - Authorization: []
-      summary: "To update password of teacher"
-      description: "This API will udpate password of a teacher. It requires teacher login token."
+      summary: "Update teacher password"
+      description: "This API allows a teacher to update their password. A valid teacher login token is required."
       tags:
-      - "Teacher"
+        - "Teacher"
       requestBody:
         required: true
         content:
@@ -254,144 +1084,495 @@ paths:
               properties:
                 oldPassword:
                   type: string
+                  description: "The current password of the teacher."
+                  example: "OldPassword123!"
                 newPassword:
                   type: string
+                  description: "The new password to be set for the teacher."
+                  example: "NewPassword456!"
       responses:
         200:
-          description: "password updated successfully"
+          description: "Password updated successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Password updated successfully."
         400:
-          description: "Unauthorized request"
+          description: "Invalid request or unauthorized access"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid old password or unauthorized access."
+        404:
+          description: "Token Authentication Failed"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: Token Authentication Failed"            
+        409:
+          description: "Teacher not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "Teacher not found in the system."
         500:
-          description: "Server error"
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred. Please try again later."
 
-  /teacher/photo-upload: 
+  /teacher/photo-upload:
     put:
       security:
-        - Authorization: []    
+        - Authorization: []
       tags:
-      - "Teacher"
-      summary: "Upload photo of teacher"
-      description: "This API will allow teacher to upload their photo."
-      produces:
-      - "application/json"
+        - "Teacher"
+      summary: "Upload teacher's photo"
+      description: "This API allows a teacher to upload their profile photo. A valid teacher login token is required."
       requestBody:
-         required: true
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 photo:
-                   type: string
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photo:
+                  type: string
+                  format: binary
+                  description: "The photo file to be uploaded. Supported formats include jpg, jpeg, and png."
+                method:
+                  type: string
+                  description: "Upload method being used, such as 'direct' or 'external'."
+                  example: "direct"
       responses:
         200:
-          description: "successful"
+          description: "Photo uploaded successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Photo uploaded successfully."
         422:
           description: "Unprocessable Entity"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "Invalid file format. Supported formats are jpg, jpeg, and png."
         403:
           description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: "Access denied. Unauthorized action."
+        404:
+          description: "Token Authentication Failed"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: Token Authentication Failed"            
         500:
           description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred. Please try again later."
 
-  /teacher/forget-password: 
+  /teacher/forget-password:
+    put:
+      summary: "Reset teacher's password"
+      description: "This API allows teachers to reset their password using a valid OTP and phone number."
+      tags:
+        - "Teacher"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                otp:
+                  type: string
+                  description: "The One-Time Password sent to the teacher's registered phone number."
+                  example: "123456"
+                phone:
+                  type: string
+                  description: "The phone number associated with the teacher's account."
+                  example: "+1234567890"
+      responses:
+        200:
+          description: "Password reset successful"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Password reset successfully."
+        422:
+          description: "Unprocessable Entity"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "Invalid OTP or phone number. Please verify the inputs."
+        403:
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: "Access denied. Unauthorized action."
+        500:
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred. Please try again later."
+
+  
+  /teacher/forget-password-change:
+    put:
+      summary: "Reset teacher's password after forgetting it"
+      description: "This API allows a teacher to reset their password using a valid ID and new password."
+      tags:
+        - "Teacher"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: "The unique ID of the teacher (could be user ID or reset token)."
+                  example: "64b2fdae2391a8723e40b1a5"
+                password:
+                  type: string
+                  description: "The new password to set for the teacher's account."
+                  example: "NewPassword@123"
+      responses:
+        200:
+          description: "Password changed successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Password updated successfully."
+        422:
+          description: "Unprocessable Entity"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "Invalid ID or password format. Please check the inputs."
+        403:
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: "Access denied. Unauthorized action."
+        500:
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred. Please try again later."
+
+  
+  /teacher/address:
     put:
       security:
         - Authorization: []    
       tags:
-      - "Teacher"
-      summary: "Forget Password of teacher"
-      description: "This API will allow to forget password "
-      produces:
-      - "application/json"
+        - "Teacher"
+      summary: "Update teacher's address details"
+      description: "This API allows a teacher to update their address information. A valid login token is required."
       requestBody:
-         required: true
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 otp:
-                   type: string
-                 phone:
-                   type: string  
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                country:
+                  type: string
+                  description: "The country where the teacher resides."
+                  example: "United States"
+                state:
+                  type: string
+                  description: "The state where the teacher resides."
+                  example: "California"
+                district:
+                  type: string
+                  description: "The district where the teacher resides."
+                  example: "Los Angeles County"
+                city:
+                  type: string
+                  description: "The city where the teacher resides."
+                  example: "Los Angeles"
+                address:
+                  type: string
+                  description: "The detailed street address."
+                  example: "123 Main Street, Apt 4B"
+                pincode:
+                  type: string
+                  description: "The postal code for the teacher's address."
+                  example: "90001"
       responses:
         200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
+          description: "Address updated successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Teacher updated successfully."
+        409:
+          description: "already registered"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "already registered. Please check the inputs."
+        400:
+          description: "Invalid data"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: "Invalid data. Unauthorized action."
+        404:
+          description: "Token Authentication Failed"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: Token Authentication Failed"            
         500:
           description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: "An unexpected error occurred. Please try again later."
+
   
-  /teacher/forget-password-change: 
-    put:
-      security:
-        - Authorization: []    
-      tags:
-      - "Teacher"
-      summary: "Forget Password change of teacher"
-      description: "This API will allow to forget password "
-      produces:
-      - "application/json"
-      requestBody:
-         required: true
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 id:
-                   type: string 
-                 password:
-                   type: string  
-      responses:
-        200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
-  
-  /teacher/address: 
-    put:
-      security:
-        - Authorization: []    
-      tags:
-      - "Teacher"
-      summary: "Forget Password change of teacher"
-      description: "This API will allow to forget password "
-      produces:
-      - "application/json"
-      requestBody:
-         required: true
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 country:
-                   type: string
-                 state:
-                   type: string  
-                 district:
-                   type: string
-                 city:
-                   type: string
-                 address:
-                   type: string
-                 pincode:
-                   type: string         
-                 
-      responses:
-        200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
-  
+ 
