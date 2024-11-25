@@ -36,6 +36,21 @@ paths:
                 password:
                   type: string
                   format: password
+                country:
+                  type: string
+                  example: "India"
+                state:
+                  type: string
+                  example: "Kerala"
+                district:
+                  type: string
+                  example: "Thrissur"
+                city:
+                  type: string
+                  example: "Thrissur"
+                pincode:
+                  type: string
+                  example: "680001"
       responses:
         '201':
           description: "Admin successfully registered."
@@ -135,10 +150,6 @@ paths:
                       affiliationNo:
                         type: string
                         example: "123456"
-                      isActive:
-                        type: boolean
-                        example: true
-
                       address:
                         type: string
                         example: "Kerala"
@@ -154,6 +165,22 @@ paths:
                       password:
                         type: string
                         format: password
+                        example: "password123"
+                     country:
+                        type: string
+                        example: "India"
+                      state:
+                        type: string
+                        example: "Kerala"
+                      district:
+                        type: string
+                        example: "Thrissur"
+                      city:
+                        type: string
+                        example: "Thrissur"
+                      pincode:
+                        type: string
+                        example: "680001"
                   message:
                     type: string
                     example: "Admin Get successfully."
