@@ -35,7 +35,7 @@ const swaggerOptions = {
         }
       }
     },
-    servers: [{ url: "http://localhost:4000/" }],
+    servers: [{ url: "http://localhost:8000/" }],
     apis: ["./src/docs/**/*.yaml"],
     // apis:["./src/routers/*.js"]
   };

@@ -1,18 +1,30 @@
 paths:
   /admin-dashboard/present-students: 
-    get:
-      security:
-        - Authorization: []
-      tags:
+   post:
+    security:
+      - Authorization: []
+    tags:
       - "Admin Dashboard"
-      summary: "To get present and total students count"
-      description: "This API will get present and total student count"
-      produces:
+    summary: "To get present and total students count"
+    description: "This API will get present and total students count"
+    produces:
       - "application/json"
-
-      responses:
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              startTime:
+                type: number
+                example: 1684564800
+              endTime:
+                type: number
+                example: 1684651200
+    responses:
       '200':
-        description: "Class deleted successfully."
+        description: "Present and total student count fetched successfully."
         content:
           application/json:
             schema:
@@ -26,9 +38,18 @@ paths:
                   example: 200
                 message:
                   type: string
-                  example: "Class deleted successfully."
+                  example: "Student count fetched successfully."
+                data:
+                  type: object
+                  properties:
+                    presentCount:
+                      type: integer
+                      example: 45
+                    totalCount:
+                      type: integer
+                      example: 100
       '400':
-        description: "Invalid or missing classId."
+        description: "Invalid request data."
         content:
           application/json:
             schema:
@@ -42,9 +63,9 @@ paths:
                   example: 400
                 message:
                   type: string
-                  example: "Invalid request: classId is required."
+                  example: "Invalid request: startTime and endTime are required."
       '404':
-        description: "Class not found with the provided classId."
+        description: "Data not found for the provided time range."
         content:
           application/json:
             schema:
@@ -58,9 +79,9 @@ paths:
                   example: 404
                 message:
                   type: string
-                  example: "Class not found with the provided classId."
+                  example: "No data found for the provided time range."
       '500':
-        description: "Unexpected error."
+        description: "Unexpected error occurred."
         content:
           application/json:
             schema:
@@ -74,131 +95,367 @@ paths:
                   example: 500
                 message:
                   type: string
-                  example: "An unexpected error occurred."
+                  example: "An unexpected error occurred. Please try again later."
+
 
   /admin-dashboard/parent-count: 
-    get:
-      security:
-        - Authorization: []
-      tags:
+   get:
+    security:
+      - Authorization: []
+    tags:
       - "Admin Dashboard"
-      summary: "To get parent count of a school."
-      description: "This API will get parents count to admin."
-      produces:
+    summary: "To get the parent count of a school."
+    description: "This API retrieves the parent count for a school for the admin."
+    produces:
       - "application/json"
+    responses:
+      '200':
+        description: "Parent count fetched successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Parent count fetched successfully."
+                data:
+                  type: object
+                  properties:
+                    parentCount:
+                      type: integer
+                      example: 300
+      '400':
+        description: "Invalid request data."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Invalid request: Missing or invalid parameters."
+      '404':
+        description: "Data not found."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "No parent data found for the requested school."
+      '500':
+        description: "Unexpected error occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred. Please try again later."
 
-      responses:
-        200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
 
   /admin-dashboard/teacher-count: 
-    get:
-      security:
-        - Authorization: []
-      tags:
+   get:
+    security:
+      - Authorization: []
+    tags:
       - "Admin Dashboard"
-      summary: "To get teacher count of a school."
-      description: "This API will get teacher count to admin."
-      produces:
+    summary: "To get the teacher count of a school."
+    description: "This API retrieves the teacher count for a school for the admin."
+    produces:
       - "application/json"
+    responses:
+      '200':
+        description: "Teacher count fetched successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Teacher count fetched successfully."
+                data:
+                  type: object
+                  properties:
+                    teacherCount:
+                      type: integer
+                      example: 50
+      '400':
+        description: "Invalid request data."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Invalid request: Missing or invalid parameters."
+      '404':
+        description: "Data not found."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "No teacher data found for the requested school."
+      '500':
+        description: "Unexpected error occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred. Please try again later."
 
-      responses:
-        200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
-
-  /admin-dashboard/holiday-events: 
-    post:
-      security:
-        - Authorization: []
-      tags:
+  /admin-dashboard/attendance-status/:sectionId: 
+   post:
+    security:
+      - Authorization: []
+    tags:
       - "Admin Dashboard"
-      summary: "To get teacher count of a school."
-      description: "This API will get teacher count to admin."
-      produces:
+    summary: "To get attendance status of a section."
+    description: "This API retrieves the attendance status of a section based on sectionId and time range."
+    produces:
       - "application/json"
-      requestBody:
-         required: true
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 month:
-                   type: number
-                 year:
-                   type: number
-      responses:
-        200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
-
-  /admin-dashboard/weekly-attendance/{sectionId}: 
-    get:
-      security:
-        - Authorization: []
-      tags:
-      - "Admin Dashboard"
-      summary: "To get weekly attendance status"
-      description: "This API will get weekly attendance data to admin."
-      produces:
-      - "application/json"
-      parameters:
-        - in: path
-          name: sectionId
-          required: true
-          description: ID of the section
+    parameters:
+      - in: path
+        name: sectionId
+        required: true
+        schema:
+          type: string
+          example: "section123"
+        description: "ID of the section to fetch attendance status for."
+    requestBody:
+      required: true
+      content:
+        application/json:
           schema:
-            type: string
-      responses:
-        200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
+            type: object
+            properties:
+              startTime:
+                type: number
+                example: 1684564800
+              endTime:
+                type: number
+                example: 1684651200
+            required:
+              - startTime
+              - endTime
+    responses:
+      '200':
+        description: "Attendance status fetched successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Attendance status fetched successfully."
+                data:
+                  type: object
+                  properties:
+                    presentCount:
+                      type: integer
+                      example: 45
+                    absentCount:
+                      type: integer
+                      example: 5
+      '400':
+        description: "Invalid request data."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: "Invalid request: Missing or invalid parameters."
+      '404':
+        description: "Data not found for the given sectionId."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 404
+                message:
+                  type: string
+                  example: "No attendance data found for the given sectionId."
+      '500':
+        description: "Unexpected error occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred. Please try again later."
 
-  /admin-dashboard/monthly-attendance/{sectionId}: 
-    get:
-      security:
-        - Authorization: []
-      tags:
-      - "Admin Dashboard"
-      summary: "To get monthly attendance data."
-      description: "This API will get teacher count to admin."
-      produces:
-      - "application/json"
-      parameters:
-        - in: path
-          name: sectionId
-          required: true
-          description: ID of the section
-          schema:
-            type: string
-      responses:
-        200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
+
+
+
+  # /admin-dashboard/holiday-events: 
+  #   post:
+  #     security:
+  #       - Authorization: []
+  #     tags:
+  #     - "Admin Dashboard"
+  #     summary: "To get teacher count of a school."
+  #     description: "This API will get teacher count to admin."
+  #     produces:
+  #     - "application/json"
+  #     requestBody:
+  #        required: true
+  #        content:
+  #          application/json:
+  #            schema:
+  #              type: object
+  #              properties:
+  #                month:
+  #                  type: number
+  #                year:
+  #                  type: number
+  #     responses:
+  #       200:
+  #         description: "successful"
+  #       422:
+  #         description: "Unprocessable Entity"
+  #       403:
+  #         description: "Forbidden"
+  #       500:
+  #         description: "Internal Server Error"
+
+  # /admin-dashboard/weekly-attendance/{sectionId}: 
+  #   get:
+  #     security:
+  #       - Authorization: []
+  #     tags:
+  #     - "Admin Dashboard"
+  #     summary: "To get weekly attendance status"
+  #     description: "This API will get weekly attendance data to admin."
+  #     produces:
+  #     - "application/json"
+  #     parameters:
+  #       - in: path
+  #         name: sectionId
+  #         required: true
+  #         description: ID of the section
+  #         schema:
+  #           type: string
+  #     responses:
+  #       200:
+  #         description: "successful"
+  #       422:
+  #         description: "Unprocessable Entity"
+  #       403:
+  #         description: "Forbidden"
+  #       500:
+  #         description: "Internal Server Error"
+
+  # /admin-dashboard/monthly-attendance/{sectionId}: 
+  #   get:
+  #     security:
+  #       - Authorization: []
+  #     tags:
+  #     - "Admin Dashboard"
+  #     summary: "To get monthly attendance data."
+  #     description: "This API will get teacher count to admin."
+  #     produces:
+  #     - "application/json"
+  #     parameters:
+  #       - in: path
+  #         name: sectionId
+  #         required: true
+  #         description: ID of the section
+  #         schema:
+  #           type: string
+  #     responses:
+  #       200:
+  #         description: "successful"
+  #       422:
+  #         description: "Unprocessable Entity"
+  #       403:
+  #         description: "Forbidden"
+  #       500:
+  #         description: "Internal Server Error"
