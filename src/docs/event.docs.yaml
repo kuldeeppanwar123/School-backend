@@ -330,3 +330,69 @@ paths:
                 message:
                   type: string
                   example: "An unexpected error occurred. Please try again later."
+
+  /event/admin:
+    get:
+      security:
+        - Authorization: []
+      summary: "To get event by admin"
+      description: "This API allow to get event by admin."
+      tags:
+      - "Event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                model:
+                  type: string
+                type:
+                  type: string
+                status:
+                  type: string
+                include:
+                  type: string 
+                startTime:
+                  type: number  
+                endTime:
+                  type: number  
+                page:
+                  type: number
+                limit:
+                  type: number    
+      responses:
+        200:
+          description: "event registered successfully"
+        400:
+          description: "Unauthorized request"
+        500:
+          description: "Server error"        
+
+ 
+    put:
+      security:
+        - Authorization: []
+      summary: "To update event"
+      description: "This API allow update event."
+      tags:
+      - "Event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventId:
+                  type: id
+                status:
+                  type: string
+      responses:
+        200:
+          description: "event registered successfully"
+        400:
+          description: "Unauthorized request"
+        500:
+          description: "Server error" 
