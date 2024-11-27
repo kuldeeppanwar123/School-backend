@@ -4,7 +4,7 @@ import {deleteSection,
   
   deleteSectionService,
   
-  getAllSection,getClassSections, getSectionService, registerSectionService} from "../services/section.services.js";
+  getAllSection,getClassSections, getSectionService, registerSectionService, updateSectionService} from "../services/section.services.js";
 import { getTeacherService, updateTeacherService } from "../services/teacher.services.js";
 import { error, success } from "../utills/responseWrapper.js";
 
@@ -75,7 +75,6 @@ export async function deleteSectionController(req, res) {
   }
 }
 
-
 export async function getAllSectionsController(req, res) {
   try {
     const sectionlist = await getAllSection();
@@ -120,4 +119,38 @@ export async function replaceTeacherController(req, res) {
   }
 }
 
+export async function assignGuestTeacherController(req, res){
+  try {
+    const { guestTeacherId, sectionId, teacherId } = req.body;
+    const adminId = req.adminId;
+    const [teacher, guestTeacher, section, guestTeacherSection] = await Promise.all([
+      getTeacherService({_id,teacherId, admin:adminId, isActive:true}),    
+      getTeacherService({_id,teacherId, admin:adminId, isActive:true}),
+      getSectionService({_id:sectionId}),    
+      getSectionService({guestTeacher:guestTeacherId}),    
+    ]);
+    if(!teacher){
+      return res.status(StatusCodes.NOT_FOUND).send(error(404, "Teacher not found."))
+    }
+    if(!guestTeacher){
+      return res.status(StatusCodes.NOT_FOUND).send(error(404, "Guest Teacher not found."))
+    }
+    if(!guestTeacherSection){
+      return res.status(StatusCodes.NOT_FOUND).send(error(404, "Guest Teacher already assigned to as guest."))
+    }
+    if(!section){
+      return res.status(StatusCodes.NOT_FOUND).send(error(404, "Section not found."))
+    }
+    if((section["teacher"].toString())!==teacherId){
+      return res.status(StatusCodes.NOT_FOUND).send(error(404, "Section Teacher mismatch."))
+    }
 
+    await updateSectionService({_id: sectionId}, {guestTeacher: guestTeacherId})
+
+    return res.status(StatusCodes.OK).send(error(404, "Section not found."))
+
+        
+  } catch (err) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error(500, err.message));
+  }
+}

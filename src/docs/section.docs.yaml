@@ -72,54 +72,270 @@ paths:
         500:
           description: "Internal Server Error"
 
-  /section/{sectionId}:    
-    delete:
-      security:
-        - Authorization: []
-      tags:
-        - "Section"
-      summary: "To delete a section"
-      description: "This API will allow admin to delete a section."
-      produces:
-        - "application/json"
-      parameters:
-        - in: path
-          name: sectionId
-          required: true
-          description: ID of the section
-          schema:
-            type: string
-      responses:
-        200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"    
-    get:
-      security:
-        - Authorization: []
-      tags:
-        - "Section"
-      summary: "To get a section"
-      description: "This API will allow admin to get a section."
-      produces:
-        - "application/json"
-      parameters:
-        - in: path
-          name: sectionId
-          required: true
-          description: ID of the section
-          schema:
-            type: string
-      responses:
-        200:
-          description: "successful"
-        422:
-          description: "Unprocessable Entity"
-        403:
-          description: "Forbidden"
-        500:
-          description: "Internal Server Error"
+  /section/{sectionId}:
+   delete:
+    security:
+      - Authorization: []
+    tags:
+      - "Section"
+    summary: "To delete a section."
+    description: "This API will allow admin to delete a section."
+    produces:
+      - "application/json"
+    parameters:
+      - in: path
+        name: sectionId
+        required: true
+        description: "ID of the section to be deleted."
+        schema:
+          type: string
+          example: "S001"
+    responses:
+      '200':
+        description: "Section deleted successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: "Section deleted successfully."
+      '422':
+        description: "Unprocessable Entity - Invalid section ID."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 422
+                message:
+                  type: string
+                  example: "Invalid sectionId provided."
+      '403':
+        description: "Forbidden - Admin permission required."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 403
+                message:
+                  type: string
+                  example: "You do not have permission to delete this section."
+      '500':
+        description: "Internal Server Error - Unexpected error occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."
+
+   get:
+    security:
+      - Authorization: []
+    tags:
+      - "Section"
+    summary: "To get details of a section."
+    description: "This API will allow admin to retrieve the details of a section."
+    produces:
+      - "application/json"
+    parameters:
+      - in: path
+        name: sectionId
+        required: true
+        description: "ID of the section to retrieve."
+        schema:
+          type: string
+          example: "S001"
+    responses:
+      '200':
+        description: "Section details retrieved successfully."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "success"
+                statusCode:
+                  type: integer
+                  example: 200
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      section:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: "Section 1"
+                          studentCount:
+                            type: integer
+                            example: 10
+                          classId:
+                            type: string
+                            example: "ds42bfvbfdbcv52nbnb"
+                            format: objectid
+                          teacher:
+                            type: string
+                            example: "vcjhvj4hj34hj234"
+                            format: objectid
+                          admin:
+                            type: string
+                            example: "vcjhvj4hj34hj234"
+                            format: objectid
+                      teacher:
+                        type: object
+                        properties:
+                          username:
+                            type: string
+                            example: "john.doe"
+                          firstname:
+                            type: string
+                            example: "John"
+                          lastname:
+                            type: string
+                            example: "Doe"
+                          isLoginAlready:
+                            type: boolean
+                            example: true
+                          dob:
+                            type: string
+                            example: "2004-02-21"
+                          bloodGroup:
+                            type: string
+                            example: "A+"
+                          email:
+                            type: string
+                            example: "john.doe@example.com"
+                          isActive:
+                            type: boolean
+                            example: true
+                          gender:
+                            type: string
+                            example: "Male"
+                          university:
+                            type: string
+                            example: "University of Technology"
+                          degree:
+                            type: string
+                            example: "Bachelor of Science in Computer Science"
+                          password:
+                            type: string
+                            example: "password123"
+                          phone:
+                            type: string
+                            example: "0123456789"
+                          address:
+                            type: string
+                            example: "123 Street, City, Country"
+                          city:
+                            type: string
+                            example: "Cityville"
+                          district:
+                            type: string
+                            example: "District A"
+                          state:
+                            type: string
+                            example: "State B"
+                          country:
+                            type: string
+                            example: "Countryland"
+                          pincode:
+                            type: string
+                            example: "123456"
+                          photo:
+                            type: string
+                            example: "https://example.com/photo.jpg"
+                          forgetPasswordCount:
+                            type: integer
+                            example: 0
+                          section:
+                            type: string
+                            example: "609e123456abcdef12345678"
+                            format: objectid
+                          admin:
+                            type: string
+                            example: "609e123456abcdef12345678"
+                            format: objectid
+                message:
+                  type: string
+                  example: "Successfully retrieved section details."
+
+      '422':
+        description: "Unprocessable Entity - Invalid section ID."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 422
+                message:
+                  type: string
+                  example: "Invalid sectionId provided."
+      '403':
+        description: "Forbidden - Admin permission required."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 403
+                message:
+                  type: string
+                  example: "You do not have permission to view this section."
+      '500':
+        description: "Internal Server Error - Unexpected error occurred."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "error"
+                statusCode:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: "An unexpected error occurred."

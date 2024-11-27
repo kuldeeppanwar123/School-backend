@@ -3,7 +3,7 @@ import {createAttendanceService,getAttendanceService, getAttendancesService, upd
 import {getStudentService} from "../services/student.service.js";
 import { error, success } from "../utills/responseWrapper.js";
 import { StatusCodes } from "http-status-codes";
-import { getSectionByIdService } from "../services/section.services.js";
+import { getSectionByIdService, getSectionService } from "../services/section.services.js";
 import { getTeacherService } from "../services/teacher.services.js";
 import { getDayNameService, getStartAndEndTimeService } from "../services/celender.service.js";
 import { getHolidayEventService } from "../services/holidayEvent.service.js";
@@ -13,6 +13,14 @@ export async function attendanceByTeacherController(req, res) {
     const {sectionId, present, absent} = req.body;
     const teacherId = req.teacherId;
     const adminId = req.adminId;
+    const section = await getSectionService({ _id: sectionId })
+    if(!section){
+      return res.status(StatusCodes.NOT_FOUND).send(error(404, "Section not found"))
+    }
+
+    if(section["guestTeacher"] && section["guestTeacher"].toString()!==teacherId){
+      return res.status(StatusCodes.UNAUTHORIZED).send(error(404, "Teacher is unauthorized"))
+    }
     let date = new Date();
     const { startTime, endTime } = getStartAndEndTimeService(date, date);
 
@@ -190,10 +198,14 @@ export async function checkAttendaceMarkedController(req, res) {
     const date = new Date();
     const {startTime, endTime} = getStartAndEndTimeService(date, date);
 
-
-    const holidayEvent = await getHolidayEventService({admin:adminId,startTime,endTime });
-    if (holidayEvent) {
+    const holiday = await getHolidayEventService({date:{$gte:startTime,$lte:endTime}, admin:adminId, holiday:true});
+    if (holiday) {
       return res.status(StatusCodes.CONFLICT).send(error(409, "Today is scheduled as holiday!"));
+    }
+    const day = getDayNameService(date.getDay());
+    date = date.getTime();
+    if (day === "Sunday") {
+      return res.status(StatusCodes.CONFLICT).send(error(409, "Today is sunday"));
     }
 
     const sectionAttendance = await getSectionAttendanceService({section:sectionId, date:{$gte:startTime, $lte:endTime}});
@@ -219,6 +231,12 @@ export async function checkParentAttendaceMarkedController(req, res) {
     if (holidayEvent) {
       return res.status(StatusCodes.CONFLICT).send(error(409, "Today is scheduled as holiday!"));
     }
+
+    const day = getDayNameService(date.getDay());
+    if (day === "Sunday") {
+      return res.status(StatusCodes.CONFLICT).send(error(409, "Today is sunday"));
+    }
+
     const attendance = await getAttendanceService({student:studentId, date:{$gte:startTime, $lte:endTime}, parentAttendance:{$ne:""}});
     const parentAttendance = attendance?attendance["parentAttendance"]:null;
     const teacherAttendance = attendance?attendance["teacherAttendance"]:null;

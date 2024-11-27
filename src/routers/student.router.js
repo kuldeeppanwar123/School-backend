@@ -1,15 +1,18 @@
 import express from "express";
-import {  deleteStudentController, getStudentsController, registerStudentController, updateStudentController } from "../controllers/student.controller.js";
+import {  deleteStudentController, getStudentsController, registerStudentController, registerStudentsFromExcelController, updateStudentController } from "../controllers/student.controller.js";
 import { adminAuthenticate } from "../middlewares/authentication/admin.authentication.middleware.js";
 import { teacherAuthenticate } from "../middlewares/authentication/teacher.authentication.middleware.js";
 import { parentAuthenticate } from "../middlewares/authentication/parent.authentication.middleware.js";
 import {deleteStudentValidation, getStudentValidation, registerStudentValidation, updateStudentByAdminValidation, updateStudentByParentValidation, updateStudentByTeacherValidation, updateStudentParentByAdminValidation, uploadStudentPhotoValidation } from "../middlewares/validation/student.validation.middleware.js";
 import { validateImageSizeMiddleware } from "../middlewares/teacher.middleware.js";
+import upload from "../middlewares/multer.middleware.js";
 
 const studentRouter = express.Router();
 
+
 studentRouter.post("/teacher", teacherAuthenticate, registerStudentValidation, registerStudentController );
 studentRouter.post("/admin", adminAuthenticate, registerStudentValidation, registerStudentController );
+studentRouter.post('/excel', adminAuthenticate, upload, registerStudentsFromExcelController);
 
 studentRouter.delete("/teacher/:studentId", teacherAuthenticate, deleteStudentValidation, deleteStudentController );
 studentRouter.delete("/admin/:studentId", adminAuthenticate, deleteStudentValidation, deleteStudentController );

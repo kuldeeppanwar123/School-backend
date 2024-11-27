@@ -1,13 +1,14 @@
-import studentModel from "../models/student.model.js";
 import { StatusCodes } from "http-status-codes";
-import { getAttendanceService } from "../services/attendance.service.js";
 import { getClassService } from "../services/class.sevices.js";
 import { getParentService,registerParentService, updateParentService } from "../services/parent.services.js";
 import { hashPasswordService } from "../services/password.service.js";
-import { findSectionById, getSectionService, updateSectionService } from "../services/section.services.js";
-import { getStudentService, registerStudentService, updateStudentService, getStudentsService, getstudentsService, getStudentCountService, getStudentsPipelineService } from "../services/student.service.js";
+import { getSectionService, updateSectionService } from "../services/section.services.js";
+import { getStudentService, registerStudentService, updateStudentService, getStudentsService, getStudentCountService, getStudentsPipelineService } from "../services/student.service.js";
 import { error, success } from "../utills/responseWrapper.js";
 import { convertToMongoId } from "../services/mongoose.services.js";
+import xlsx from 'xlsx'
+import fs from 'fs/promises'
+import { registerStudentsFromExcelHelper } from "../helpers/student.helper.js";
 
 export async function registerStudentController(req, res) {
   try {
@@ -41,6 +42,7 @@ export async function registerStudentController(req, res) {
     await updateSectionService({_id:sectionId}, {studentCount:section["studentCount"]+1});
     return res.status(StatusCodes.OK).send(success(201, "Student created successfully!"));
   } catch (err) {
+
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error(500, err.message));
   }
 }
@@ -380,3 +382,34 @@ export async function getStudentsController(req, res){
     }
 };
 
+export async function registerStudentsFromExcelController(req, res){
+  try {
+    const file=req.file;
+    const {sectionId, classId} = req.body;
+    const adminId = req.adminId;
+
+    const[section, classInfo] = await Promise.all([
+      getSectionService({ _id: sectionId }),
+      getClassService({ _id: classId })
+    ])
+
+    if(!section){
+      return res.status(StatusCodes.NOT_FOUND).send(success(404, "Section not found"));
+    }
+    if(!classInfo){
+      return res.status(StatusCodes.NOT_FOUND).send(404, "Class not found");
+    }
+    if(section["classId"].toString()!==classInfo["_id"].toString()){
+      return res.status(StatusCodes.BAD_REQUEST).send(success(400, "Invalid class, section ids"));
+    }
+
+    const workbook = xlsx.readFile(file.path)
+    const sheetName = workbook.SheetNames[0]
+    const students = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName])
+    const registeredStudentsCount = await registerStudentsFromExcelHelper(students, sectionId, classId, adminId)
+    await fs.unlink(file.path)
+    return res.status(StatusCodes.OK).send(success(201,`${registeredStudentsCount} Students registered successfully`))
+  } catch(err){
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error(501,err.message))
+  }
+}

@@ -17,6 +17,10 @@ const sectionSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "teacher"
   },
+  guestTeacher:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "guestTeacher"
+  },
   admin: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "admin"

@@ -49,23 +49,19 @@ const studentSchema = mongoose.Schema({
   },
   parent: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "parent",
-    required: true
+    ref: "parent"
   },
   section: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "section",
-    required: true
+    ref: "section"
   },
   classId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "class",
-    required: true
+    ref: "class"
   },
   admin: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "admin",
-    required: true
+    ref: "admin"
   }
 });
 

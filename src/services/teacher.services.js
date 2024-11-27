@@ -47,8 +47,8 @@ export async function updateTeacherService(filter, update){
 
 export async function getTeacherCountService(filter){
   try {
-    const parents = await teacherModel.countDocuments(filter);
-    return parents;
+    const teachers = await teacherModel.countDocuments(filter);
+    return teachers;
   } catch (error) {
     throw error;  
   }

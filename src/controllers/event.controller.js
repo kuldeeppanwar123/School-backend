@@ -47,7 +47,7 @@ export async function registerEventController(req, res){
   }
 }
 
-export async function getEventsController(req,res){
+export async function   getEventsController(req,res){
   try {
     const {model, type, status, include, startTime, endTime, page=1, limit=10} = req.query
     const[ receiverModel, receiverId ] = getReceiver(req);
@@ -58,7 +58,6 @@ export async function getEventsController(req,res){
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
     const skipNum = (pageNum-1)*limitNum;
-    console.log(typeof startTime)
 
     const filter ={ receiver: {id: convertToMongoId(receiverId), model: receiverModel }}
     filter["date"]={ $gte: Number(startTime), $lte: Number(endTime) }
@@ -189,7 +188,6 @@ export async function updateEventByAdminController(req, res){
       return res.status(StatusCodes.NOT_FOUND).send(error(404, "Event not found."));
     }
 
-    console.log(event)
     if(event.receiver.id.toString()!==receiverId.toString()){
       return res.status(StatusCodes.UNAUTHORIZED).send(401, "Unauthorized to update event.");
     }

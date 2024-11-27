@@ -3,6 +3,8 @@ import { error, success } from "../utills/responseWrapper.js";
 import {getAdminService, registerAdminService,  updateAdminService } from "../services/admin.services.js";
 import { hashPasswordService, matchPasswordService } from "../services/password.service.js";
 import { StatusCodes } from "http-status-codes";
+import { constructStudentXlsxTemplate } from "../helpers/admin.helper.js";
+
 
 export async function registerAdminController(req, res) {
   try {
@@ -15,10 +17,10 @@ export async function registerAdminController(req, res) {
       return res.status(StatusCodes.CONFLICT).send(error(409, "Email already exist"));
     }
     if (admin && admin?.affiliationNo === affiliationNo) {
-      return res.status(StatusCodes.CONFLICT).send(error(400, "Affiliation no already exist"));
+      return res.status(StatusCodes.CONFLICT).send(error(409, "Affiliation no already exist"));
     }
     if (admin && admin?.phone === phone) {
-      return res.status(StatusCodes.CONFLICT).send(error(400, "Phone number already exist"));
+      return res.status(StatusCodes.CONFLICT).send(error(409, "Phone number already exist"));
     }
     const hashedPassword = await hashPasswordService(password);
     req.body["password"] = hashedPassword;
@@ -132,5 +134,19 @@ export async function getAdminController(req, res) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(error(500, err.message));
+  }
+}
+
+export async function getStudentDemoExcelSheetController(req, res){
+  try {
+    const workbook = constructStudentXlsxTemplate();
+    console.log({workbook})
+    res.setHeader("Content-Type","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=" + "student-template.xlsx")
+    await workbook.xlsx.write(res)
+    res.status(StatusCodes.OK).end()
+
+  } catch (err) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error(500, err.message));
   }
 }

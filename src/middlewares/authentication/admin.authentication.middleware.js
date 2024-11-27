@@ -11,6 +11,9 @@ export async function adminAuthenticate(req, res, next) {
     }
     const parsedToken = token.split(" ")[1];
     const decoded = Jwt.verify(parsedToken, config.accessTokenSecretKey);
+    // if(decoded['role']!=='admin'){
+    //   return res.send(error(409,"Invalid admin token"))
+    // }
     const _id = decoded.adminId;
     const admin = await getAdminService({_id, isActive:true});
     if (!admin){

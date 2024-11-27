@@ -22,6 +22,37 @@ const registerStudentSchema = Joi.object({
   }),
 });
 
+const registerStudentFromExcelSchema = Joi.object({
+  firstname: Joi.string().required().messages({
+    "any.required": "First name is required.",
+  }),
+  lastname: Joi.string().required().messages({
+    "any.required": "Last name is required.",
+  }),
+  gender: Joi.string().required().messages({"any.required": "Gender is required.", }),
+  bloodGroup: Joi.string().optional(),
+  dob: Joi.string().optional(),
+  address: Joi.string().optional(),
+  city: Joi.string().optional(),
+  district: Joi.string().optional(),
+  state: Joi.string().optional(),
+  country: Joi.string().optional(),
+  pincode: Joi.string().optional(),
+
+  parentName: Joi.string().required().messages({
+    "any.required": "Parent name is required.",
+  }),
+  phone: Joi.number().integer().min(1000000000).max(5999999999).required().messages({
+    "number.base": "Phone number must be a valid number.",
+    "number.min": "Phone number must have exactly 10 digits.",
+    "number.max": "Phone number must have exactly 10 digits.",
+    "any.required": "Phone number is required.",
+  }),
+  email: Joi.string().optional(),
+  qualification: Joi.string().optional(),
+  occupation: Joi.string().optional(),
+});
+
 const deleteStudentSchema = Joi.object({
   studentId: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
       "string.pattern.base": "Invalid student ID.",
@@ -212,6 +243,7 @@ const uploadStudentPhotoSchema = Joi.object({
 export {
   getStudentsSchema,
   registerStudentSchema,
+  registerStudentFromExcelSchema,
   deleteStudentSchema,
   updateStudentByTeacherSchema,
   updateStudentByAdminSchema,

@@ -11,6 +11,9 @@ export async function parentAuthenticate(req, res, next) {
     }
     const parsedToken = token.split(" ")[1];
     const decoded = Jwt.verify(parsedToken, config.accessTokenSecretKey);
+    // if(decoded['role']!=='parent'){
+    //   return res.send(error(409,"Invalid parent token"))
+    // }
     const _id = decoded.parentId;
     const parent = await getParentService({_id});
     if (!parent) {

@@ -12,6 +12,9 @@ export async function superAdminAuthenticate(req, res, next) {
     }
     const parsedToken = token.split(" ")[1];
     const decoded = Jwt.verify(parsedToken, config.accessTokenSecretKey);
+    // if(decoded['role']!=='superAdmin'){
+    //   return res.send(error(409,"Invalid super-admin token"))
+    // }
     const _id = decoded.id;
     const superAdmin = await getSuperAdminService({_id});
     if (!superAdmin){
